@@ -22,8 +22,20 @@ type tokenData =
     id:ObjectId,
     firstname:string
 }
+type Todos = {
+    todo:String;
+    description?:String;
+    due_date?:Date;
+    color:String;
+    completed:boolean;
+    date:Date;
+}
+type Optional<T>={
+    [ P in keyof T]: T[P] | undefined;
+}
+type updatedTodoBody = Optional<Todos>;
 interface UserToken extends Request{
-    user:tokenData /* | JwtPayload */;
+    user:tokenData;
 }
 type AuthenticatedRequest = UserToken | Request;
 export {
@@ -33,4 +45,6 @@ export {
     tokenData,
     UserToken,
     AuthenticatedRequest,
+    Todos,
+    updatedTodoBody,
 }
