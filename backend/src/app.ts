@@ -4,6 +4,7 @@ import cors from 'cors';
 import v1 from './v1/routes/v1.routes';
 import users from './v1/routes/user.routes';
 import todos from './v1/routes/todos.routes';
+import categories from './v1/routes/categories.routes';
 import notfound from './v1/routes/notfound.routes';
 
 const app = express();
@@ -17,7 +18,7 @@ const PORT = process.env.PORT || process.env.API_PORT;
 // routes
 app.use('/api/v1',v1);
 app.use('/api/v1/users',users);
-app.use('/api/v1/users/categories');
+app.use('/api/v1/users/categories',categories);
 app.use('/api/v1/users/:firstname/:categoryId/todos',todos)
 
 // catch all route

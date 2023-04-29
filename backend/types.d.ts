@@ -38,6 +38,12 @@ interface UserToken extends Request{
     user:tokenData;
 }
 type AuthenticatedRequest = UserToken | Request;
+type category ={
+    name:string;
+    todos:Todos[];
+}
+type updatedCategoryBody = Omit<category,'todos'>;
+type postCategoryBody = updatedCategoryBody;
 export {
     signUp,
     logIn,
@@ -47,4 +53,7 @@ export {
     AuthenticatedRequest,
     Todos,
     updatedTodoBody,
+    category,
+    updatedCategoryBody,
+    postCategoryBody,
 }
