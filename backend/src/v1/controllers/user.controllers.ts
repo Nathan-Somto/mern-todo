@@ -1,10 +1,11 @@
 import { Request,Response } from "express";
+import {ObjectId} from 'mongoose';
 import UserModel from "../models/user.model";
 import { logIn, signUp } from "../../../types";
 import statusCodes from "../utils/statusCodes";
 import createToken from "../utils/createToken";
 import bcrypt from 'bcrypt';
-import { UserToken } from "../middlewares/auth";
+import { UserToken } from "../../../types";
 
 let emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
@@ -41,7 +42,7 @@ const user = new UserModel(
 const token = createToken(
    {
    firstname,
-   id:user._id as unknown  as string,
+   id:user._id as unknown  as ObjectId,
 });
 await user.save();
 res
@@ -74,7 +75,7 @@ let logIn = async  (req:Request,res:Response)=> {
                  .status(statusCodes.Bad_Request)
                  .json({message:"incorrect email or password"});
       }
-      const token = createToken({firstname:foundUser.firstname, id:foundUser._id as unknown as string});
+      const token = createToken({firstname:foundUser.firstname, id:foundUser._id as unknown as ObjectId});
       res
           .status(statusCodes.OK)
           .json({accessToken:token});
@@ -124,4 +125,4 @@ let deleteUser = async (req:UserToken | Request, res:Response)=>{
       res.status(statusCodes.Internal_Server).json({message:`failed to delete account :)`});
    }
 }
-export {logIn,signUp,updatePassword};
+export {logIn,signUp,updatePassword, deleteUser};

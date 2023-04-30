@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // port for server
-const PORT = process.env.PORT || process.env.API_PORT;
+const PORT = process.env.PORT || /* process.env.API_PORT; */ 8000;
 
 // routes
 app.use('/api/v1',v1);
