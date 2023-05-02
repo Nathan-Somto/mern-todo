@@ -92,7 +92,7 @@ let postTodo = async (req:AuthenticatedRequest, res:Response)=>{
             const Category = user.categories.id(categoryId);
             console.log(Category);
             let newTodo = new TodoModel({completed,todo,color,description,due_date});
-            if(!newTodo.validateDescription()){
+            if(newTodo.validateDescription()){
                 console.log(description);
                 return res.status(statusCodes.Bad_Request).json({message:"description cannot be longer than 40 words"});
             }
