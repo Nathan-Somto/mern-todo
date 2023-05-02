@@ -75,9 +75,10 @@ let getTodos = async (req:AuthenticatedRequest, res:Response)=>{
 
 let postTodo = async (req:AuthenticatedRequest, res:Response)=>{
     const userId = (req as UserToken).user.id;
+    console.log(req.params);
     const categoryId = req.params.categoryId;
     const body = req.body as Todos;
-    if(req.body.todo && req.body.color){
+    if(!req.body.todo && !req.body.color){
          return res.status(statusCodes.Bad_Request).json({message:"missing todo, completed and color"});
     }
     const {completed, todo, color,due_date} = body;
@@ -86,8 +87,10 @@ let postTodo = async (req:AuthenticatedRequest, res:Response)=>{
         let user = await UserModel.findById(userId);
         if(user !== null)
         {
+            console.log(user);
+            console.log(categoryId);
             const Category = user.categories.id(categoryId);
-           
+            console.log(Category);
             let newTodo = new TodoModel({completed,todo,color,description,due_date});
             if(!newTodo.validateDescription()){
                 console.log(description);
@@ -126,8 +129,9 @@ let updateTodo = async (req:AuthenticatedRequest, res:Response) => {
     let userId = (req as UserToken).user.id;
     const {categoryId, todoId} = req.params;
     const body = req.body as updatedTodoBody;
+    console.log("update todo params ", req.params);
     try{
-        let user = await UserModel.findOne(userId);
+        let user = await UserModel.findById(userId);
         if(user !== null){
         const category = user.categories.id(categoryId);
         if(category === null){

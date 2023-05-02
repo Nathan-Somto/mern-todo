@@ -33,7 +33,7 @@ const TodosSchema = new mongoose.Schema<Todos,TodoModel,ITodosMethods>({
 TodosSchema.methods.validateDescription = function ():boolean {
    if(this.description === undefined) return true;
     let words = this.description;
-    return words.split(' ').length >= 20;
+    return words.split(' ').length >= 40;
 };
 const TodoModel = mongoose.model<Todos, TodoModel>('Todos',TodosSchema);
 export {TodoModel};
