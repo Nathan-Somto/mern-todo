@@ -11,12 +11,15 @@ import { CategoriesModel } from "../models/categories.model";
 import statusCodes from "../utils/statusCodes";
 
 /**
- * @description: gets all the available user categories, excluding the todos in the category object.
- * @param req {AuthenticatedRequest}: authenticated request that is sent by the client contains  decoded user data.
+ * @method GET
+ * @access Private
+ * @description gets all the available user categories, excluding the todos in the category object.
+ * @param req {AuthenticatedRequest} authenticated request that is sent by the client contains  decoded user data.
  * @param res {Response}: the response that is sent to the client.
+ * @route /api/v1/users/category/
  * @returns 
  */
-//GET /api/v1/users/category/
+//GET 
 const getCategory = async (req: AuthenticatedRequest, res: Response) => {
   const userId = (req as UserToken).user.id;
   try {
@@ -32,12 +35,15 @@ const getCategory = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 /**
+ * @method Post
+ * @access Private
  * @description: posts a new category with a name into the user categories, the name must be unique.
  * @param req {AuthenticatedRequest}: authenticated request that is sent by the client contains  decoded user data.
  * @param res {Response}: the response that is sent to the client.
+ * @route /api/v1/users/category/
  * @returns 
  */
-//Post /api/v1/users/category/
+//Post 
 const postCategory = async (req: AuthenticatedRequest, res: Response) => {
   const userId = (req as UserToken).user.id;
   const body = req.body as postCategoryBody;
@@ -70,12 +76,15 @@ const postCategory = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 /**
+ * @method PUT
+ * @access Private
  * @description: updates only the name of a specified category.
  * @param req {AuthenticatedRequest}: authenticated request that is sent by the client contains  decoded user data.
  * @param res {Response}: the response that is sent to the client.
+ * @route /api/v1/users/category/:categoryId
  * @returns 
  */
-//PUT /api/v1/users/category/:categoryId
+//PUT 
 const updateCategory = async (req: AuthenticatedRequest, res: Response) => {
   const userId = (req as UserToken).user.id;
   const { categoryId } = req.params;
@@ -101,12 +110,15 @@ const updateCategory = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 /**
+ * @access Private
+ * @method DELETE
  * @description: deletes all the content in a specified user category.
  * @param req {AuthenticatedRequest}: authenticated request that is sent by the client contains  decoded user data.
  * @param res {Response}: the response that is sent to the client.
+ * @route /api/v1/users/category/:categoryId
  * @returns: a response with the document or a message.
  */
-// DELETE /api/v1/users/category/:categoryId
+// DELETE 
 const deleteCategory = async (req: AuthenticatedRequest, res: Response) => {
     const userId = (req as UserToken).user.id;
     const { categoryId } = req.params;

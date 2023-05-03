@@ -8,14 +8,18 @@ import { AuthenticatedRequest, UserToken,Todos, updatedTodoBody } from "../../..
 
 
 /**
- * @description : gets a paginated lists of todos under a specified category from the database.
- * @param req :(UserToken | Requsest): the request object that contains the decoded user info.
+ * @method GET
+ * @access Private
+ * @description  gets a paginated lists of todos under a specified category from the database.
+ * @param req {UserToken | Requsest}: the request object that contains the decoded user info.
  * @param res 
  * @returns the page and limit set for the todos.
+ * @route /api/v1/users/todos/:firstname/:categoryId/?page=:page&limit=:limit
  */
-// GET  users/:firstname/:categoryId/todos/?page=:page&limit=:limit
+
 
 let getTodos = async (req:AuthenticatedRequest, res:Response)=>{
+    console.log(req.query);
     const userId = (req as UserToken).user.id;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 5;
@@ -65,17 +69,17 @@ let getTodos = async (req:AuthenticatedRequest, res:Response)=>{
 }
 
 /**
- * @description : posts a new todo to the database under  a specified user category.
- * @param req :(UserToken | Requsest): the request object that contains the decoded user info.
+ * @method POST
+ * @access Private
+ * @description  posts a new todo to the database under  a specified user category.
+ * @param req {UserToken | Requsest} the request object that contains the decoded user info.
  * @param res 
  * @returns if successful returns the newly updated user todo array
+ *  @route /api/v1/users/todos/:firstname/:categoryId/
  */
-
-// POST  users/:firstname/:categoryId/todos
 
 let postTodo = async (req:AuthenticatedRequest, res:Response)=>{
     const userId = (req as UserToken).user.id;
-    console.log(req.params);
     const categoryId = req.params.categoryId;
     const body = req.body as Todos;
     if(!req.body.todo && !req.body.color){
@@ -87,10 +91,7 @@ let postTodo = async (req:AuthenticatedRequest, res:Response)=>{
         let user = await UserModel.findById(userId);
         if(user !== null)
         {
-            console.log(user);
-            console.log(categoryId);
             const Category = user.categories.id(categoryId);
-            console.log(Category);
             let newTodo = new TodoModel({completed,todo,color,description,due_date});
             if(newTodo.validateDescription()){
                 console.log(description);
@@ -117,19 +118,20 @@ let postTodo = async (req:AuthenticatedRequest, res:Response)=>{
 }
 // PUT
 /**
- * @description : updates certain fields in the todo object under a specified category.
- * @param req :(UserToken | Requsest): the request object that contains the decoded user info.
+ * @access Private 
+ * @method PUT
+ * @description  updates certain fields in the todo object under a specified category.
+ * @param req {UserToken | Requsest} the request object that contains the decoded user info.
  * @param res 
  * @returns if successful returns the newly updated user todo array
+ *  @route /api/v1/users/todos/:firstname/:categoryId/:todoId
  */
 
-// PUT /api/v1/users/:firstname/:categoryId/todos/:todoId
 
 let updateTodo = async (req:AuthenticatedRequest, res:Response) => {
     let userId = (req as UserToken).user.id;
     const {categoryId, todoId} = req.params;
     const body = req.body as updatedTodoBody;
-    console.log("update todo params ", req.params);
     try{
         let user = await UserModel.findById(userId);
         if(user !== null){
@@ -159,13 +161,15 @@ let updateTodo = async (req:AuthenticatedRequest, res:Response) => {
 }
 
 /**
- * @description : deletes a user specified todo.
- * @param req :(UserToken | Requsest): the request object that contains the decoded user info.
+ * @method DELETE 
+ * @access Private
+ * @description  deletes a user specified todo.
+ * @param req {UserToken | Requsest} the request object that contains the decoded user info.
  * @param res 
  * @returns if successful returns the newly updated user todo array
+ * @route /api/v1/users/todos/:firstname/:categoryId/:todosId
  */
 
-// Delete /api/v1/users/:firstname/:categoryId/todos/:todoId
 
 let deleteTodo = async (req:AuthenticatedRequest, res:Response)=>{
     let userId = (req as UserToken).user.id;

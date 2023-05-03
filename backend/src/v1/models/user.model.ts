@@ -1,8 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import bcrypt from 'bcrypt';
 import { CategoriesSchema } from "./categories.model";
-
-const UserSchema = new mongoose.Schema({
+import { IUser } from "../../../types";
+interface IUserMethods{
+    comparePassword(publicPassword:string):Promise<boolean>;
+}
+type UserModel = Model<IUser, {}, IUserMethods>;
+const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     firstname:{
         type:String, 
         required:true,
@@ -21,7 +25,16 @@ const UserSchema = new mongoose.Schema({
     },
     categories:[CategoriesSchema],
 });
-
+// Password compare method
+/**
+ * 
+ * @param publicPassword the  password that is passed as a request to be compared with the hashed in db.
+ * @returns boolean
+ */
+UserSchema.methods.comparePassword =  async function(publicPassword:string){
+  const isPassword =  await bcrypt.compare(this.password, publicPassword);
+  return isPassword;
+}
 // hashes the password before it is saved to the mongodb database.
 UserSchema.pre('save',async function(){
     try{
@@ -33,6 +46,6 @@ UserSchema.pre('save',async function(){
     }
 
 });
-const UserModel = mongoose.model('users',UserSchema);
+const UserModel = mongoose.model<IUser, UserModel>('users',UserSchema);
 
 export default UserModel;

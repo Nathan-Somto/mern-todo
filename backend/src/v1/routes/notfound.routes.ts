@@ -2,9 +2,8 @@ import express from 'express';
 import statusCodes from '../utils/statusCodes';
 const router = express.Router();
 
-router.use((req,res)=>{
-    const body = req.body;
-     console.log(body);
+router.use((_req,res)=>{
+    
     res.status(statusCodes.Not_Found).json({message:"the resource does not exist"});
 });
 

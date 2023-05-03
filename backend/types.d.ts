@@ -4,6 +4,7 @@ interface IUser{
     firstname:string;
     password:string;
     email:string;
+    categories?:[Categories]
 };
 type signUp = IUser;
 type logIn = Omit<IUser, 'firstname'>;
@@ -21,6 +22,10 @@ type tokenData =
 {
     id:ObjectId,
     firstname:string
+}
+type Categories ={
+    name:string;
+    Todos?:[todos]
 }
 type Todos = {
     todo:String;
@@ -56,4 +61,5 @@ export {
     category,
     updatedCategoryBody,
     postCategoryBody,
+    IUser,
 }

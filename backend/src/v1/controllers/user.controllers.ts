@@ -4,11 +4,16 @@ import UserModel from "../models/user.model";
 import { logIn, signUp } from "../../../types";
 import statusCodes from "../utils/statusCodes";
 import createToken from "../utils/createToken";
-import bcrypt from 'bcrypt';
 import { UserToken } from "../../../types";
 
 let emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-
+/**
+ * @access Public
+ * @method POST
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 let signUp = async (req:Request,res:Response)=>{
    const {
       firstname,
@@ -54,7 +59,13 @@ catch(err){
       console.error(err);
 }
 };
-
+/**
+ * @access Public
+ * @method POST
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 let logIn = async  (req:Request,res:Response)=> {
    const {email, password} = req.body as logIn;
    if(!(email && password)){
@@ -69,7 +80,7 @@ let logIn = async  (req:Request,res:Response)=> {
                  .status(statusCodes.Bad_Request)
                  .json({message:"incorrect email or password"});
       }
-      let decrytedPassword = await bcrypt.compare(password, foundUser.password as string);
+      let decrytedPassword = await foundUser.comparePassword(password);
       if(!decrytedPassword){
          return res
                  .status(statusCodes.Bad_Request)
@@ -86,7 +97,13 @@ let logIn = async  (req:Request,res:Response)=> {
                  .json({message:'there was an error'});
    }
 };
-
+/**
+ * @access Private
+ * @method PUT
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 let updatePassword = async (req:UserToken | Request, res:Response)=>{
  const userId = (req as UserToken).user.id;
  const {oldPassword, newPassword} = req.body;
@@ -96,15 +113,13 @@ let updatePassword = async (req:UserToken | Request, res:Response)=>{
  try{
    let foundUser = await UserModel.findById(userId);
    if(foundUser !== null){
-      let decrytedPassword = await bcrypt.compare(oldPassword, foundUser.password as string);
+      let decrytedPassword = await foundUser.comparePassword(oldPassword);
       if(!decrytedPassword){
          return res
                  .status(statusCodes.Bad_Request)
                  .json({message:"the old password passed is incorrect"});
       }
-      let salt =  await bcrypt.genSalt(10);
-      let hashedPassword = await bcrypt.hash(newPassword,salt);
-      foundUser.password = hashedPassword;
+      foundUser.password = newPassword;
       await foundUser.save();
       res.status(statusCodes.OK).json({message:"successfully changed the user's password"});
    }
@@ -113,16 +128,21 @@ let updatePassword = async (req:UserToken | Request, res:Response)=>{
 
  }
 };
-
+/**
+ * @access Private
+ * @method DELETE
+ * @param req 
+ * @param res 
+ */
 let deleteUser = async (req:UserToken | Request, res:Response)=>{
    const userId = (req as UserToken).user.id;
    try{
         let deletedAccount = await UserModel.findByIdAndDelete(userId);
-        res.status(statusCodes.OK).json({message:`successfully deleted ${deletedAccount?.firstname} account :(`});
+        return res.status(statusCodes.OK).json({message:`successfully deleted ${deletedAccount?.firstname} account :(`});
    }
    catch(err){
       console.error(err);
-      res.status(statusCodes.Internal_Server).json({message:`failed to delete account :)`});
+     return  res.status(statusCodes.Internal_Server).json({message:`failed to delete account :)`});
    }
 }
 export {logIn,signUp,updatePassword, deleteUser};
