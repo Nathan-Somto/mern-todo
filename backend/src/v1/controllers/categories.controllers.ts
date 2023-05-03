@@ -2,7 +2,7 @@ import { Response } from "express";
 import {
   AuthenticatedRequest,
   UserToken,
-  category,
+  Categories,
   postCategoryBody,
   updatedCategoryBody,
 } from "../../../types";
@@ -55,7 +55,7 @@ const postCategory = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const user = await UserModel.findById(userId);
     if (user !== null) {
-      const nameExists: category | undefined = user.categories.find(
+      const nameExists: Categories | undefined = user.categories.find(
         (category) => category.name === body.name
       );
       if (nameExists !== undefined) {

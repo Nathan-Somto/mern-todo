@@ -1,10 +1,10 @@
 import { Request } from "express";
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 interface IUser{
     firstname:string;
     password:string;
     email:string;
-    categories?:[Categories]
+    categories:Types.DocumentArray<Categories>;
 };
 type signUp = IUser;
 type logIn = Omit<IUser, 'firstname'>;
@@ -25,7 +25,7 @@ type tokenData =
 }
 type Categories ={
     name:string;
-    Todos?:[todos]
+    todos:Types.DocumentArray<Todos>
 }
 type Todos = {
     todo:String;
@@ -43,10 +43,6 @@ interface UserToken extends Request{
     user:tokenData;
 }
 type AuthenticatedRequest = UserToken | Request;
-type category ={
-    name:string;
-    todos:Todos[];
-}
 type updatedCategoryBody = Omit<category,'todos'>;
 type postCategoryBody = updatedCategoryBody;
 export {
@@ -58,7 +54,7 @@ export {
     AuthenticatedRequest,
     Todos,
     updatedTodoBody,
-    category,
+    Categories,
     updatedCategoryBody,
     postCategoryBody,
     IUser,
