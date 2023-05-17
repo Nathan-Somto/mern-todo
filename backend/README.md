@@ -118,5 +118,95 @@ Access : `Private`
 if successful 
 
 ```json
+{
+    "categories":[
+        {
+            "id":"categoryId1",
+            "name":"categoryName1"
+        }, {
+            "id":"categoryId2",
+            "name":"categoryName2"
+        }
+    ]
+}
+```
+***Note: the category ids are important for requests on user todos***
 
+##### Post
+Route : `/users/categories/`
+
+Access : `Private`
+
+the name passed in for a category must be **unique**
+
+for the request body in `json` pass in the following data to create a new category of todos for a user.
+```json
+{
+   "name":"Groceries"
+}
+```
+if successful 
+
+```json
+{
+   
+        
+     {
+            "id":"newCategoryId",
+            "name":"Groceries"
+        }
+   
+}
+```
+
+#### Put
+
+Route : `/users/categories/:categoryId`
+
+Access : `Private`
+
+for the request body in `json` pass in the following data to update the name  of a category.
+
+```json
+{
+   "name":"Shopping"
+}
+```
+
+```json
+{
+   
+        
+     {
+            "id":"newCategoryId",
+            "name":"Shopping"
+        }
+   
+}
+```
+
+##### DELETE
+
+Route : `/users/categories/:categoryId`
+
+Access : `Private`
+
+pass in a valid categoryId in the request url.
+
+***Note: deleting a category deletes all the users todos***
+ let say categoryId1 was passw
+if successful 
+
+```json
+{
+    "categories":[
+        {
+            "id":"categoryId1",
+            "name":"categoryName1"
+        }, {
+            "id":"categoryId2",
+            "name":"categoryName2"
+        }
+    ]
+}
 ```
