@@ -1,13 +1,13 @@
-
+import {BrowserRouter} from 'react-router-dom';
 import './App.css'
+import Pages from './pages'
 
 function App() {
   return (
-    <>
-      <h1 className='text-violet-700'>
-        Let's buld the todo front end!
-      </h1>
-    </>
+    <BrowserRouter>
+     <Pages/>
+    </BrowserRouter>
+   
   )
 }
 
