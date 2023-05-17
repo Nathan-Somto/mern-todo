@@ -1,9 +1,10 @@
 import { Request } from "express";
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 interface IUser{
     firstname:string;
     password:string;
     email:string;
+    categories:Types.DocumentArray<Categories>;
 };
 type signUp = IUser;
 type logIn = Omit<IUser, 'firstname'>;
@@ -22,10 +23,28 @@ type tokenData =
     id:ObjectId,
     firstname:string
 }
+type Categories ={
+    name:string;
+    todos:Types.DocumentArray<Todos>
+}
+type Todos = {
+    todo:String;
+    description?:String;
+    due_date?:Date;
+    color:String;
+    completed:boolean;
+    date:Date;
+}
+type Optional<T>={
+    [ P in keyof T]: T[P] | undefined;
+}
+type updatedTodoBody = Optional<Todos>;
 interface UserToken extends Request{
-    user:tokenData /* | JwtPayload */;
+    user:tokenData;
 }
 type AuthenticatedRequest = UserToken | Request;
+type updatedCategoryBody = Omit<category,'todos'>;
+type postCategoryBody = updatedCategoryBody;
 export {
     signUp,
     logIn,
@@ -33,4 +52,10 @@ export {
     tokenData,
     UserToken,
     AuthenticatedRequest,
+    Todos,
+    updatedTodoBody,
+    Categories,
+    updatedCategoryBody,
+    postCategoryBody,
+    IUser,
 }
